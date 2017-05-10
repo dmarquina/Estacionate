@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Estacionate</string>
+    <string name="facebook_app_id">165303400665678</string>
+    <string name="cancel_login">Inicio de sesión cancelado</string>
+    <string name="error_login">Lo sentimos, ha ocurrido un error</string>
+    <string name="logout">Cerrar Sesion</string>
+    <string name="firebase_error_login">Lo sentimos, hubo un error.</string>
+    <string name="title_activity_find_parking">Map</string>
+    <string name="toolbar_tittle">Estaciónate</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Configuración</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main">Estacionate</string>
+</resources>

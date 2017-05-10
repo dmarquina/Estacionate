@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "216276902681",
+    "firebase_url": "https://estacionate-c7098.firebaseio.com",
+    "project_id": "estacionate-c7098",
+    "storage_bucket": "estacionate-c7098.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:216276902681:android:e676a86bf55205bf",
+        "android_client_info": {
+          "package_name": "com.estacionate.estacionate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "216276902681-ojob9beka2l96nadd97nefto7ajv2ooc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2Hca8W2m3FjbYXSniKA1tWnizFMV9bcM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
