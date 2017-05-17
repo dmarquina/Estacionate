@@ -13,6 +13,24 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="EditTextWhite" parent="TextAppearance.AppCompat">
+        <item name="android:textColorHint">@color/editTextColorWhite</item>
+        <item name="android:textSize">@dimen/edittext_textsize</item>
+        <item name="android:textColorPrimary">@color/editTextColorWhite</item>
+        <item name="colorAccent">@color/editTextColorWhite</item>
+        <item name="colorControlNormal">@color/editTextColorWhite</item>
+        <item name="colorControlActivated">@color/editTextColorWhite</item>
+    </style>
+
+    <style name="EditTextBlack" parent="TextAppearance.AppCompat">
+        <item name="android:textColorHint">@color/editTextColorGray</item>
+        <item name="android:textSize">@dimen/edittext_textsize</item>
+        <item name="android:textColorPrimary">@color/editTextColorBlack</item>
+        <item name="colorAccent">@color/editTextColorGray</item>
+        <item name="colorControlNormal">@color/editTextColorGray</item>
+        <item name="colorControlActivated">@color/editTextColorGray</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

@@ -27,6 +27,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        startNavigation();
+        getFindParkingFragment();
+        checkSession();
+    }
+
+    public void startNavigation(){
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -39,8 +45,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        checkSession();
     }
 
     @Override
@@ -62,16 +66,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_logout) {
+            logout();
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -82,9 +81,15 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            setTitle("Estacionate");
+            getFindParkingFragment();
         } else if (id == R.id.nav_gallery) {
-            logout();
+            setTitle("Registrar estacionamiento)");
+            CreateParkingFragment createParkingFragment = new CreateParkingFragment();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.content_frame, createParkingFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .addToBackStack(null).commit();
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -104,20 +109,11 @@ public class MainActivity extends AppCompatActivity
     public void checkSession(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null){
-            goFindParkinActivity();
             String name = user.getDisplayName();
             String email = user.getEmail();
         }else {
             goLoginScreen();
         }
-    }
-
-    private void goFindParkinActivity(){
-        Intent intent = new Intent(this, FindParkingActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
     }
 
     private void goLoginScreen(){
@@ -126,6 +122,14 @@ public class MainActivity extends AppCompatActivity
                 Intent.FLAG_ACTIVITY_CLEAR_TASK |
                 Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    private void getFindParkingFragment(){
+        FindParkingFragment findParkingFragment= new FindParkingFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, findParkingFragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .addToBackStack(null).commit();
     }
 
     public void logout(){

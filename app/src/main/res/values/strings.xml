@@ -13,4 +13,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main">Estacionate</string>
+    <string name="hint_name">Nombre</string>
+    <string name="hint_capacity">Capacidad</string>
+    <string name="day_price_hour">Precio de día (por hora)</string>
+    <string name="night_price_hour">Precio de noche (por hora)</string>
+    <string name="log_out">Salir</string>
 </resources>

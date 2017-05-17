@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null){
-                    goFindParkinActivity();
+                    goMainActivity();
                 }
             }
         };
@@ -90,15 +90,15 @@ public class LoginActivity extends AppCompatActivity {
                 if(!task.isSuccessful()){
                     Toast.makeText(getApplicationContext(),R.string.firebase_error_login,Toast.LENGTH_SHORT).show();
                 }
-                goFindParkinActivity();
+                goMainActivity();
                 progressBar.setVisibility(View.GONE);
                 loginfbButton.setVisibility(View.VISIBLE);
             }
         });
     }
 
-    public void goFindParkinActivity(){
-        Intent intent = new Intent(this, FindParkingActivity.class);
+    public void goMainActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_CLEAR_TASK |
                 Intent.FLAG_ACTIVITY_NEW_TASK);
