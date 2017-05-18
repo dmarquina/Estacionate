@@ -74,11 +74,32 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <TextView
+                android:id="@+id/textLoclizarEstacionamiento"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="10dp"
+                android:text="Indica la_localización de tu estacionamiento" />
+
             <com.google.android.gms.maps.MapView
-                android:layout_height="fill_parent"
-                android:layout_width="fill_parent"
+                android:layout_height="196dp"
+                android:layout_width="match_parent"
                 android:orientation="vertical"
                 android:id="@+id/mapviewselector" />
+
+            <android.support.v7.widget.ButtonBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                >
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    android:textColor="@color/editTextColorWhite"
+                    android:text="Registrar" />
+            </android.support.v7.widget.ButtonBarLayout>
 
         </LinearLayout>
 

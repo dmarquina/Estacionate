@@ -108,10 +108,7 @@ public class MainActivity extends AppCompatActivity
 
     public void checkSession(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null){
-            String name = user.getDisplayName();
-            String email = user.getEmail();
-        }else {
+        if(user == null){
             goLoginScreen();
         }
     }

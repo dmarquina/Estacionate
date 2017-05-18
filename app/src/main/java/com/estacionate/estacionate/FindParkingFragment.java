@@ -88,7 +88,7 @@ public class FindParkingFragment extends Fragment {
 
 
         // Updates the location and zoom of the MapView
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(43.1, -87.9), 10);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(-12.053623,-77.0852702), 15);
         map.animateCamera(cameraUpdate);
 
         return v;
@@ -101,17 +101,7 @@ public class FindParkingFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        if (mapView != null) {
-            mapView.onDestroy();
-        }
-        super.onDestroy();
-        mapView.onDestroy();
-    }
-
-    @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mapView.onLowMemory();
     }
 }

@@ -41,6 +41,8 @@ public class CreateParkingFragment extends Fragment {
 
         loadMap(v, savedInstanceState);
 
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(-12.053623,-77.0852702), 15);
+        map.animateCamera(cameraUpdate);
         return v;
     }
 
@@ -52,7 +54,8 @@ public class CreateParkingFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        map = mapView.getMap();
+        map.getUiSettings().setMyLocationButtonEnabled(false);
         try {
             MapsInitializer.initialize(this.getContext());
         } catch (Exception e) {
@@ -88,5 +91,6 @@ public class CreateParkingFragment extends Fragment {
 
             }
         });
+
     }
 }

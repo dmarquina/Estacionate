@@ -14,6 +14,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -68,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null){
+                    saveUser(user);
                     goMainActivity();
                 }
             }
@@ -103,6 +105,20 @@ public class LoginActivity extends AppCompatActivity {
                 Intent.FLAG_ACTIVITY_CLEAR_TASK |
                 Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    public void saveUser(final FirebaseUser user){
+        Firebase mRootRef = new Firebase("https://estacionate-c7098.firebaseio.com/User");
+
+        String UID = user.getUid();
+        String name = user.getDisplayName();
+        String email = user.getEmail();
+
+        Firebase childRef = mRootRef.child(UID);
+        Firebase childRefName = childRef.child("name");
+        childRefName.setValue(name);
+        Firebase childRefEmail = childRef.child("email");
+        childRefEmail.setValue(email);
     }
 
     @Override
