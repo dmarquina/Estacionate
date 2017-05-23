@@ -1,4 +1,4 @@
-package com.estacionate.estacionate.POJOS;
+package com.estacionate.estacionate.Model;
 
 import com.google.firebase.database.Exclude;
 

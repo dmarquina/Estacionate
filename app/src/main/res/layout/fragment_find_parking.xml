@@ -4,10 +4,12 @@
     android:layout_height="fill_parent"
     tools:context="com.estacionate.estacionate.FindParkingFragment">
 
-    <com.google.android.gms.maps.MapView
-        android:layout_height="fill_parent"
-        android:layout_width="fill_parent"
-        android:id="@+id/mapview"
-        />
+    <FrameLayout
+        android:layout_weight="1"
+        android:id="@+id/mapContainer"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+    </FrameLayout>
 </LinearLayout>

@@ -15,7 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.estacionate.estacionate.Services.LocationService;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -24,11 +26,14 @@ public class MainActivity extends AppCompatActivity
 
     FragmentTransaction fragmentTransaction;
 
+    public static LatLng myPosition;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         startNavigation();
         getFindParkingFragment();
+        startService(new Intent(this, LocationService.class));
         checkSession();
     }
 
@@ -133,5 +138,17 @@ public class MainActivity extends AppCompatActivity
         FirebaseAuth.getInstance().signOut();
         LoginManager.getInstance().logOut();
         goLoginScreen();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopService(new Intent(this, LocationService.class));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(new Intent(this, LocationService.class));
     }
 }
