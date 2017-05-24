@@ -10,7 +10,7 @@ import java.util.Map;
  */
 
 public class Parking {
-
+    public String pKey;
     public String uid;
     public String parkingName;
     public int capacity;

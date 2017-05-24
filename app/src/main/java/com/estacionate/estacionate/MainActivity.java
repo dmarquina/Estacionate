@@ -89,16 +89,19 @@ public class MainActivity extends AppCompatActivity
             setTitle("Estacionate");
             getFindParkingFragment();
         } else if (id == R.id.nav_gallery) {
-            setTitle("Registrar estacionamiento)");
+            setTitle("Registrar");
             CreateParkingFragment createParkingFragment = new CreateParkingFragment();
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.content_frame, createParkingFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .addToBackStack(null).commit();
         } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
+            setTitle("Mis estacionamientos");
+            MyParkingsFragment myParkingsFragment = new MyParkingsFragment();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.content_frame, myParkingsFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .addToBackStack(null).commit();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

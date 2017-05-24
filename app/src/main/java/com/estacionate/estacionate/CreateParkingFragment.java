@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.estacionate.estacionate.Model.Parking;
 import com.firebase.client.Firebase;
@@ -133,6 +134,7 @@ public class CreateParkingFragment extends Fragment {
                 0);
 
         mRootRef.push().setValue(newParking);
+        Toast.makeText(getActivity(), "Estacionamiento registrado.", Toast.LENGTH_SHORT).show();
     }
 
     public void cleanEditFields(){

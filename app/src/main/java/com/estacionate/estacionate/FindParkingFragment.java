@@ -125,7 +125,7 @@ public class FindParkingFragment extends Fragment implements GoogleApiClient.Con
             longitude = MainActivity.myPosition.longitude;
             Toast.makeText(getActivity(), ""+latitude+" "+longitude, Toast.LENGTH_LONG).show();
         }else{
-            Toast.makeText(getActivity(), "NO u.u", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Bienvenido.", Toast.LENGTH_SHORT).show();
         }
 /*        if (MainActivity.myPosition == null)
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new MarkerOptions().position(new LatLng(-10.496425, -74.745169)).getPosition(), 4.0f));
