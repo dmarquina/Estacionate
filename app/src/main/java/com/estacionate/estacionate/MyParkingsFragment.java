@@ -44,7 +44,6 @@ public class MyParkingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        SupportMapFragment supportMapFragment = SupportMapFragment.newInstance();
         v = inflater.inflate(R.layout.fragment_my_parkings, container, false);
 
         rv =  (RecyclerView) v.findViewById(R.id.recycler_parkings);

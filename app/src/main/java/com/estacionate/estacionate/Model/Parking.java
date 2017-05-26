@@ -17,9 +17,25 @@ public class Parking {
     public Double dayPrice;
     public Double nightPrice;
     public int spacesOcuppied;
+    public Double latitude;
+    public Double longitude;
 
     public Parking() {
         // Default constructor required for calls to DataSnapshot.getValue(Post.class)
+    }
+
+    public Parking(String uid,
+                   String parkingName,
+                   int capacity,
+                   Double dayPrice,
+                   Double nightPrice,
+                   int spacesOcuppied) {
+        this.uid = uid;
+        this.parkingName = parkingName;
+        this.capacity = capacity;
+        this.dayPrice = dayPrice;
+        this.nightPrice = nightPrice;
+        this.spacesOcuppied = spacesOcuppied;
     }
 
     public Parking(String uid,
@@ -27,13 +43,17 @@ public class Parking {
             int capacity,
             Double dayPrice,
             Double nightPrice,
-           int spacesOcuppied) {
+            int spacesOcuppied,
+            Double latitude,
+            Double longitude) {
         this.uid = uid;
         this.parkingName = parkingName;
         this.capacity = capacity;
         this.dayPrice = dayPrice;
         this.nightPrice = nightPrice;
         this.spacesOcuppied = spacesOcuppied;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     @Exclude
@@ -44,6 +64,8 @@ public class Parking {
         result.put("capacity", capacity);
         result.put("dayPrice", dayPrice);
         result.put("nightPrice", nightPrice);
+        result.put("latitude", latitude);
+        result.put("longitude", longitude);
 
         return result;
     }

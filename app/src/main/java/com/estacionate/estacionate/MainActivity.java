@@ -2,9 +2,8 @@ package com.estacionate.estacionate;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -33,7 +32,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         startNavigation();
         getFindParkingFragment();
-        startService(new Intent(this, LocationService.class));
         checkSession();
     }
 
@@ -64,7 +62,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -90,29 +87,19 @@ public class MainActivity extends AppCompatActivity
             getFindParkingFragment();
         } else if (id == R.id.nav_gallery) {
             setTitle("Registrar");
-            CreateParkingFragment createParkingFragment = new CreateParkingFragment();
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.content_frame, createParkingFragment)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .addToBackStack(null).commit();
+            getCreateParkingFragment();
         } else if (id == R.id.nav_slideshow) {
             setTitle("Mis estacionamientos");
-            MyParkingsFragment myParkingsFragment = new MyParkingsFragment();
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.content_frame, myParkingsFragment)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .addToBackStack(null).commit();
+            getMyParkingsFragment();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
     public void checkSession(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -135,6 +122,22 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.content_frame, findParkingFragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .addToBackStack(null).commit();
+    }
+
+    private void getCreateParkingFragment(){
+        CreateParkingFragment createParkingFragment = new CreateParkingFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, createParkingFragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .addToBackStack(null).commit();
+    }
+
+    private void getMyParkingsFragment(){
+        MyParkingsFragment myParkingsFragment = new MyParkingsFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.content_frame, myParkingsFragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .addToBackStack(null).commit();
     }
 
     public void logout(){

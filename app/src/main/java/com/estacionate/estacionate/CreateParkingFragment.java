@@ -3,8 +3,11 @@ package com.estacionate.estacionate;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +21,11 @@ import android.widget.Toast;
 
 import com.estacionate.estacionate.Model.Parking;
 import com.firebase.client.Firebase;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,11 +37,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class CreateParkingFragment extends Fragment {
+public class CreateParkingFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener {
 
+    final int CERO_ENTERO = 0;
     GoogleMap map;
     MapView mapView;
     View v;
+    LatLng ll;
+    LocationRequest mLocationRequest;
+    GoogleApiClient mGoogleApiClient;
     EditText parkingName;
     EditText capacity;
     EditText dayPrice;
@@ -42,7 +54,6 @@ public class CreateParkingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        SupportMapFragment supportMapFragment = SupportMapFragment.newInstance();
         v = inflater.inflate(R.layout.fragment_create_parking, container, false);
 
         mapView = (MapView) v.findViewById(R.id.mapviewselector);
@@ -51,8 +62,6 @@ public class CreateParkingFragment extends Fragment {
         startCreateParkingButton();
         loadMap(v, savedInstanceState);
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(-12.053623,-77.0852702), 15);
-        map.animateCamera(cameraUpdate);
         return v;
     }
 
@@ -88,7 +97,7 @@ public class CreateParkingFragment extends Fragment {
             public void onMapReady(GoogleMap googleMap) {
                 CreateParkingFragment.this.map = googleMap;
 
-
+/*
                 // my-location listener
                 googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
                     @Override
@@ -108,7 +117,14 @@ public class CreateParkingFragment extends Fragment {
                     return;
                 } else {
                     googleMap.setMyLocationEnabled(true);
-                }
+                }*/
+
+                mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                        .addApi(LocationServices.API)
+                        .addConnectionCallbacks(CreateParkingFragment.this)
+                        .addOnConnectionFailedListener(CreateParkingFragment.this)
+                        .build();
+                mGoogleApiClient.connect();
 
             }
         });
@@ -131,7 +147,9 @@ public class CreateParkingFragment extends Fragment {
                 Integer.parseInt(capacity.getText().toString()),
                 Double.parseDouble(dayPrice.getText().toString()),
                 Double.parseDouble(nightPrice.getText().toString()),
-                0);
+                CERO_ENTERO,
+                ll.latitude,
+                ll.longitude);
 
         mRootRef.push().setValue(newParking);
         Toast.makeText(getActivity(), "Estacionamiento registrado.", Toast.LENGTH_SHORT).show();
@@ -142,5 +160,45 @@ public class CreateParkingFragment extends Fragment {
         capacity.setText("");
         dayPrice.setText("");
         nightPrice.setText("");
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(1000);
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+        }else{
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, CreateParkingFragment.this);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (location == null) {
+            Toast.makeText(getContext(), "lo sentimos no podemos obtener ubicación actual", Toast.LENGTH_SHORT).show();
+        } else {
+            ll = new LatLng(location.getLatitude(), location.getLongitude());
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15);
+            map.animateCamera(update);
+        }
     }
 }
