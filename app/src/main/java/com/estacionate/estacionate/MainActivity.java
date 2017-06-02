@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         startNavigation();
-        getFindParkingFragment();
         checkSession();
+
     }
 
     public void startNavigation(){
@@ -105,6 +105,8 @@ public class MainActivity extends AppCompatActivity
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user == null){
             goLoginScreen();
+        }else{
+            getFindParkingFragment();
         }
     }
 

@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -33,14 +32,11 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
 
-    private ProgressBar progressBar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar_login);
         callbackManager = CallbackManager.Factory.create();
         loginfbButton = (LoginButton) findViewById(R.id.loginFBButton);
 
@@ -82,7 +78,6 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
     private void handleFacebookAccessToken(AccessToken accessToken){
-        progressBar.setVisibility(View.VISIBLE);
         loginfbButton.setVisibility(View.GONE);
 
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
@@ -93,7 +88,6 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),R.string.firebase_error_login,Toast.LENGTH_SHORT).show();
                 }
                 goMainActivity();
-                progressBar.setVisibility(View.GONE);
                 loginfbButton.setVisibility(View.VISIBLE);
             }
         });
