@@ -11,12 +11,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.estacionate.estacionate.Model.Parking;
@@ -37,12 +39,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import butterknife.ButterKnife;
+
 public class CreateParkingFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener {
 
     final int CERO_ENTERO = 0;
     GoogleMap map;
     MapView mapView;
     View v;
+    Bundle savedInstanceState;
+    LocationManager lm;
     LatLng ll;
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
@@ -56,12 +62,21 @@ public class CreateParkingFragment extends Fragment implements GoogleApiClient.C
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_create_parking, container, false);
 
-        mapView = (MapView) v.findViewById(R.id.mapviewselector);
-        mapView.onCreate(savedInstanceState);
+        ButterKnife.bind(this, v);
+        this.savedInstanceState = savedInstanceState;
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
 
+            Log.e("PERMISSION", "Solicitando permiso de GPS");
+            requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        } else {
+            mapView = (MapView) v.findViewById(R.id.mapviewselector);
+            mapView.onCreate(savedInstanceState);
+            lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            loadMap(v, savedInstanceState);
+        }
         startCreateParkingButton();
-        loadMap(v, savedInstanceState);
-
         return v;
     }
 
@@ -84,8 +99,6 @@ public class CreateParkingFragment extends Fragment implements GoogleApiClient.C
         } catch (Exception e) {
             e.printStackTrace();
         }
-        map = mapView.getMap();
-        map.getUiSettings().setMyLocationButtonEnabled(false);
         try {
             MapsInitializer.initialize(this.getContext());
         } catch (Exception e) {
@@ -97,8 +110,6 @@ public class CreateParkingFragment extends Fragment implements GoogleApiClient.C
             public void onMapReady(GoogleMap googleMap) {
                 CreateParkingFragment.this.map = googleMap;
 
-/*
-                // my-location listener
                 googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
                     @Override
                     public boolean onMyLocationButtonClick() {
@@ -117,7 +128,7 @@ public class CreateParkingFragment extends Fragment implements GoogleApiClient.C
                     return;
                 } else {
                     googleMap.setMyLocationEnabled(true);
-                }*/
+                }
 
                 mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                         .addApi(LocationServices.API)
@@ -176,8 +187,10 @@ public class CreateParkingFragment extends Fragment implements GoogleApiClient.C
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+            Log.e("MY_LOCATION", "if");
         }else{
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, CreateParkingFragment.this);
+            Log.e("MY_LOCATION", "else");
         }
     }
 

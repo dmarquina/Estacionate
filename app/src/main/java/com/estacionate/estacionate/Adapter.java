@@ -79,7 +79,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyParkingsHolder>{
                                                 parking.capacity,
                                                 parking.dayPrice,
                                                 parking.nightPrice,
-                                                newSpacesOcuppied);
+                                                newSpacesOcuppied,
+                                                parking.latitude,
+                                                parking.longitude);
             mRootRef.setValue(parkingUpdated);
         }else{
             //Toast.makeText(getItemViewType(), "Estacionamiento registrado.", Toast.LENGTH_SHORT).show();
@@ -96,7 +98,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyParkingsHolder>{
                     parking.capacity,
                     parking.dayPrice,
                     parking.nightPrice,
-                    newSpacesOcuppied);
+                    newSpacesOcuppied,
+                    parking.latitude,
+                    parking.longitude);
             mRootRef.setValue(parkingUpdated);
         }else{
             //Toast.makeText(getItemViewType(), "Estacionamiento registrado.", Toast.LENGTH_SHORT).show();

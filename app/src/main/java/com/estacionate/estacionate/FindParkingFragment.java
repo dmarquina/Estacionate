@@ -1,27 +1,19 @@
 package com.estacionate.estacionate;
 
-import android.*;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +33,6 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -49,8 +40,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -63,6 +52,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import static android.graphics.Typeface.BOLD;
+import static android.graphics.Typeface.ITALIC;
+import static android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE;
 
 public class FindParkingFragment extends Fragment implements LocationListener, ConnectionCallbacks, OnConnectionFailedListener {
     List<Marker> markers;
@@ -92,6 +84,7 @@ public class FindParkingFragment extends Fragment implements LocationListener, C
             lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
             loadMap(v, savedInstanceState);
         }
+
         return v;
     }
 
@@ -118,21 +111,23 @@ public class FindParkingFragment extends Fragment implements LocationListener, C
                 googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
                     @Override
                     public boolean onMyLocationButtonClick() {
-                        Log.e("MY_LOCATION", "ok");
+                       /* Log.e("MY_LOCATION", "ok");
                         final LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
                         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                             Log.e("GPS", "disabled");
                             startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), 1);
-                        }
+                        }*/
                         return false;
                     }
                 });
+
                 if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     Log.e("error4", "error4");
                     return;
                 } else {
                     googleMap.setMyLocationEnabled(true);
                 }
+
                 mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                         .addApi(LocationServices.API)
                         .addConnectionCallbacks(FindParkingFragment.this)
@@ -158,13 +153,7 @@ public class FindParkingFragment extends Fragment implements LocationListener, C
                 Marker m;
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     Parking parking = snapshot.getValue(Parking.class);
-                    MarkerOptions options = new MarkerOptions()
-                                            .title(parking.parkingName)
-                                            .position(new LatLng(parking.latitude,parking.longitude))
-                                            .snippet(""+parking.nightPrice)
-                                            .snippet(parking.spacesOcuppied + "/" + parking.capacity);
-                    m = map.addMarker(options);
-                    m.showInfoWindow();
+                    m = map.addMarker(makeMarkerOptions(parking));
                     markers.add(m);
                 }
             }
@@ -201,8 +190,10 @@ public class FindParkingFragment extends Fragment implements LocationListener, C
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+            Log.e("MY_LOCATION", "if");
         }else{
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, FindParkingFragment.this);
+            Log.e("MY_LOCATION", "else");
         }
     }
 
@@ -216,9 +207,9 @@ public class FindParkingFragment extends Fragment implements LocationListener, C
         if (location == null) {
             Toast.makeText(getContext(), "lo sentimos no podemos obtener ubicación actual", Toast.LENGTH_SHORT).show();
         } else {
-            LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+           /* LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15);
-            map.animateCamera(update);
+            map.animateCamera(update);*/
         }
     }
 /*
@@ -267,5 +258,32 @@ public class FindParkingFragment extends Fragment implements LocationListener, C
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    private MarkerOptions makeMarkerOptions(Parking parking){
+        IconGenerator iconFactory = new IconGenerator(getContext());
+        double so = parking.spacesOcuppied;
+        double cap = parking.capacity;
+        double r = so/cap;
+        if(r<0.5){iconFactory.setStyle(IconGenerator.STYLE_GREEN);}
+        else if(r>=0.5 && r<0.8){iconFactory.setStyle(IconGenerator.STYLE_ORANGE);}
+        else if(r>=0.8){iconFactory.setStyle(IconGenerator.STYLE_RED);}
+        CharSequence text = makeCharSequence(parking);
+        return new MarkerOptions()
+                .title(parking.parkingName)
+                .position(new LatLng(parking.latitude,parking.longitude))
+                .icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(text)))
+                .anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV());
+    }
+
+    private CharSequence makeCharSequence(Parking parking) {
+        String title = parking.parkingName;
+        String price = ""+parking.nightPrice;
+        String spaces = parking.spacesOcuppied + "/" + parking.capacity;
+        String sequence = title + "\n" + price + "\n" + spaces;
+       /* SpannableStringBuilder ssb = new SpannableStringBuilder(sequence);
+        ssb.setSpan(new StyleSpan(ITALIC), 0, prefix.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+        ssb.setSpan(new StyleSpan(BOLD), prefix.length(), sequence.length(), SPAN_EXCLUSIVE_EXCLUSIVE);*/
+        return sequence;
     }
 }
